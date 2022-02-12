@@ -7,7 +7,7 @@ pwnable.kr - simple_login solution with only one byte overflow instead of four
 
 I only saw writeups using the full four bytes overflow to fully
 control EBP. In this writeup I'll show you how to get RCE with 
-just single byte overflow.
+a single byte overflow.
 
 The idea is that we have an 8 byte buffer followed by *EBP in 
 which we are able to write up to 12 bytes. Hence we can get
