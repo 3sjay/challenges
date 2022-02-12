@@ -4,12 +4,15 @@ from base64 import b64encode
 """
 pwnable.kr - simple_login solution with only one byte overflow instead of four
 
-The idea is that we have an 8 byte buffer followed by *EBP. There exists
-a memcpy overflow in auth() with four bytes OOB. Hence we can get control
-of EBP. I only saw writeups using the full four bytes overflow to fully
-control EBP. But this is not necessary as we're going to demonstrate.
 
-Just overflowing the LSB of *EBP is enough for RCE.
+I only saw writeups using the full four bytes overflow to fully
+control EBP. In this writeup I'll show you how to get RCE with 
+just single byte overflow.
+
+The idea is that we have an 8 byte buffer followed by *EBP in 
+which we are able to write up to 12 bytes. Hence we can get
+control of EBP. But, just overflowing the LSB of *EBP is enough 
+for RCE.
 
 
 main()
@@ -61,8 +64,10 @@ Dump of assembler code for function auth:
 (gdb) x/wx $ebp
 0xffffce38:	0xffffce88      // 1
 ```
-Before the memcpy *EBP is 0xffffce88 [1]. Our stack looks like this.
+Before the memcpy *EBP is 0xffffce88 [1], make a mental note of 
+that value. 
 
+Our stack looks like this.
 ```
 (gdb) x/20wx $esp
 0xffffce10:	0xffffce30	0x0811eb40	0x00000009	0x08120aa8
